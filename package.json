@@ -12,16 +12,16 @@
     "type": "git",
     "url": "https://github.com/leader22/wa-synth-sample.git"
   },
-  "author": "",
+  "author": "leader22",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/leader22/wa-synth-sample/issues"
   },
   "homepage": "https://github.com/leader22/wa-synth-sample",
   "devDependencies": {
+    "babel": "^4.6.3",
+    "browserify": "^9.0.3",
+    "watchify": "^2.4.0",
     "babelify": "^5.0.3"
-  },
-  "dependencies": {
-    "watchify": "^2.4.0"
   }
 }
