@@ -1,7 +1,28 @@
+* {
+    box-sizing: border-box;
+}
 .Keyboard {
     display: flex;
+    justify-content: center;
+    padding: 8px;
+    width: 50%;
+    margin: 0 auto;
+    background-color: #000;
+    -webkit-user-select: none;
 }
 .Keyboard-key {
-    flex: 1 1 100%;
-    font-size: 5rem;
+    height: 150px;
+    width: 22.5px;
+    border: 1px solid #000;
+    background-color: #fff;
+    color: #000;
+}
+.Keyboard-key.m-key-black {
+    position: absolute;
+    margin-left: -6px;
+    z-index: 1;
+    width: 12px;
+    height: 97px;
+    background-color: #000;
+    color: #fff;
 }
