@@ -1,0 +1,7 @@
+.Keyboard {
+    display: flex;
+}
+.Keyboard-key {
+    flex: 1 1 100%;
+    font-size: 5rem;
+}
