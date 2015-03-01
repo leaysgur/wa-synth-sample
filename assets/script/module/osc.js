@@ -2,6 +2,7 @@ module.exports = (function() {
     'use strict';
 
     let instance = null;
+    let Ctx = require('./ctx');
 
     class Osc {
         constructor() {
@@ -12,7 +13,6 @@ module.exports = (function() {
         }
 
         _initialize() {
-            let Ctx = global.AudioContext || global.webkitAudioContext;
             this._oscNodePool = {};
             this.ctx = new Ctx();
             this.masterGain = this.ctx.createGain();
@@ -32,8 +32,8 @@ module.exports = (function() {
         stopByNoteNo(noteNo) {
             let oscNode = this._oscNodePool[noteNo];
             if (oscNode) {
-                this._oscNodePool[noteNo].stop(0);
-                this._oscNodePool[noteNo].disconnect(0);
+                oscNode.stop(0);
+                oscNode.disconnect(0);
                 oscNode = this._oscNodePool[noteNo] = null;
             }
         }
