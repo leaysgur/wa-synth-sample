@@ -36,10 +36,11 @@ module.exports = (function() {
     }
 
     function stopByNoteNo(noteNo) {
-        if (noteNo in this._oscNodePool) {
+        var oscNode = this._oscNodePool[noteNo];
+        if (oscNode) {
             this._oscNodePool[noteNo].stop(0);
             this._oscNodePool[noteNo].disconnect(0);
-            this._oscNodePool[noteNo] = null;
+            oscNode = this._oscNodePool[noteNo] = null;
         }
     }
 
@@ -61,4 +62,4 @@ module.exports = (function() {
     function _noteNoToFreq(noteNo) {
         return 440.0 * Math.pow(2.0, (noteNo - 69.0) / 12.0);
     }
-}(this.self || global));
+}());

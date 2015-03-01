@@ -3,7 +3,7 @@
 ;(function(global) {
     'use strict';
 
-    var Osc = require('./modules/osc');
+    var Osc = require('./../module/osc');
 
     var KeyboardApp = function() {
         return this._initialize.apply(this, arguments);
@@ -88,4 +88,4 @@
         return [].slice.call(elms);
     }
 
-}(this.self || global));
+}(window));
