@@ -95,64 +95,95 @@
 (function (global){
 "use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 module.exports = (function () {
     "use strict";
 
     var instance = null;
-    var Osc = function Osc() {
-        if (instance === null) {
-            instance = this._initialize.apply(this, arguments);
+
+    var Osc = (function () {
+        function Osc() {
+            _classCallCheck(this, Osc);
+
+            if (instance === null) {
+                instance = this._initialize.apply(this, arguments);
+            }
+            return instance;
         }
-        return instance;
-    };
-    Osc.prototype = {
-        constructor: Osc,
-        _initialize: initialize,
-        playByNoteNo: playByNoteNo,
-        stopByNoteNo: stopByNoteNo,
-        setMute: setMute,
-        destroy: destroy
-    };
 
-    function initialize(args) {
-        var Ctx = global.AudioContext || global.webkitAudioContext;
-        this._oscNodePool = {};
-        this.ctx = new Ctx();
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.connect(this.ctx.destination);
-        return this;
-    }
+        _prototypeProperties(Osc, null, {
+            _initialize: {
+                value: function _initialize(args) {
+                    var Ctx = global.AudioContext || global.webkitAudioContext;
+                    this._oscNodePool = {};
+                    this.ctx = new Ctx();
+                    this.masterGain = this.ctx.createGain();
+                    this.masterGain.connect(this.ctx.destination);
+                    return this;
+                },
+                writable: true,
+                configurable: true
+            },
+            playByNoteNo: {
+                value: function playByNoteNo(noteNo) {
+                    var freq = _noteNoToFreq(noteNo);
+                    var osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
 
-    function playByNoteNo(noteNo) {
-        var freq = _noteNoToFreq(noteNo);
-        var osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
+                    osc.frequency.value = freq;
+                    osc.connect(this.masterGain);
+                    osc.start(this.ctx.currentTime);
+                },
+                writable: true,
+                configurable: true
+            },
+            stopByNoteNo: {
+                value: function stopByNoteNo(noteNo) {
+                    var oscNode = this._oscNodePool[noteNo];
+                    if (oscNode) {
+                        this._oscNodePool[noteNo].stop(0);
+                        this._oscNodePool[noteNo].disconnect(0);
+                        oscNode = this._oscNodePool[noteNo] = null;
+                    }
+                },
+                writable: true,
+                configurable: true
+            },
+            setMute: {
+                value: (function (_setMute) {
+                    var _setMuteWrapper = function setMute(_x) {
+                        return _setMute.apply(this, arguments);
+                    };
 
-        osc.frequency.value = freq;
-        osc.connect(this.masterGain);
-        osc.start(this.ctx.currentTime);
-    }
+                    _setMuteWrapper.toString = function () {
+                        return _setMute.toString();
+                    };
 
-    function stopByNoteNo(noteNo) {
-        var oscNode = this._oscNodePool[noteNo];
-        if (oscNode) {
-            this._oscNodePool[noteNo].stop(0);
-            this._oscNodePool[noteNo].disconnect(0);
-            oscNode = this._oscNodePool[noteNo] = null;
-        }
-    }
+                    return _setMuteWrapper;
+                })(function (setMute) {
+                    var val = setMute ? 0 : 1;
+                    this.masterGain.gain.value = val;
+                }),
+                writable: true,
+                configurable: true
+            },
+            destroy: {
+                value: function destroy() {
+                    for (var noteNo in this._oscNodePool) {
+                        this._oscNodePool[noteNo].stop(0);
+                        this._oscNodePool[noteNo].disconnect(0);
+                        this._oscNodePool[noteNo] = null;
+                    }
+                },
+                writable: true,
+                configurable: true
+            }
+        });
 
-    function setMute(setMute) {
-        var val = setMute ? 0 : 1;
-        this.masterGain.gain.value = val;
-    }
-
-    function destroy() {
-        for (var noteNo in this._oscNodePool) {
-            this._oscNodePool[noteNo].stop(0);
-            this._oscNodePool[noteNo].disconnect(0);
-            this._oscNodePool[noteNo] = null;
-        }
-    }
+        return Osc;
+    })();
 
     return Osc;
 

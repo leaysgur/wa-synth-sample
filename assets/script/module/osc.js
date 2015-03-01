@@ -1,59 +1,54 @@
 module.exports = (function() {
     'use strict';
 
-    var instance = null;
-    var Osc = function() {
-        if (instance === null) {
-            instance = this._initialize.apply(this, arguments);
+    let instance = null;
+
+    class Osc {
+        constructor() {
+            if (instance === null) {
+                instance = this._initialize.apply(this, arguments);
+            }
+            return instance;
         }
-        return instance;
-    };
-    Osc.prototype = {
-        constructor:  Osc,
-        _initialize:  initialize,
-        playByNoteNo: playByNoteNo,
-        stopByNoteNo: stopByNoteNo,
-        setMute:      setMute,
-        destroy:      destroy
-    };
 
-    function initialize(args) {
-        var Ctx = global.AudioContext || global.webkitAudioContext;
-        this._oscNodePool = {};
-        this.ctx = new Ctx();
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.connect(this.ctx.destination);
-        return this;
-    }
-
-    function playByNoteNo(noteNo) {
-        var freq = _noteNoToFreq(noteNo);
-        var osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
-
-        osc.frequency.value = freq;
-        osc.connect(this.masterGain);
-        osc.start(this.ctx.currentTime);
-    }
-
-    function stopByNoteNo(noteNo) {
-        var oscNode = this._oscNodePool[noteNo];
-        if (oscNode) {
-            this._oscNodePool[noteNo].stop(0);
-            this._oscNodePool[noteNo].disconnect(0);
-            oscNode = this._oscNodePool[noteNo] = null;
+        _initialize(args) {
+            let Ctx = global.AudioContext || global.webkitAudioContext;
+            this._oscNodePool = {};
+            this.ctx = new Ctx();
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.connect(this.ctx.destination);
+            return this;
         }
-    }
 
-    function setMute(setMute) {
-        var val = (setMute) ? 0 : 1;
-        this.masterGain.gain.value = val;
-    }
+        playByNoteNo(noteNo) {
+            let freq = _noteNoToFreq(noteNo);
+            let osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
 
-    function destroy() {
-        for (var noteNo in this._oscNodePool) {
-            this._oscNodePool[noteNo].stop(0);
-            this._oscNodePool[noteNo].disconnect(0);
-            this._oscNodePool[noteNo] = null;
+            osc.frequency.value = freq;
+            osc.connect(this.masterGain);
+            osc.start(this.ctx.currentTime);
+        }
+
+        stopByNoteNo(noteNo) {
+            let oscNode = this._oscNodePool[noteNo];
+            if (oscNode) {
+                this._oscNodePool[noteNo].stop(0);
+                this._oscNodePool[noteNo].disconnect(0);
+                oscNode = this._oscNodePool[noteNo] = null;
+            }
+        }
+
+        setMute(setMute) {
+            let val = (setMute) ? 0 : 1;
+            this.masterGain.gain.value = val;
+        }
+
+        destroy() {
+            for (let noteNo in this._oscNodePool) {
+                this._oscNodePool[noteNo].stop(0);
+                this._oscNodePool[noteNo].disconnect(0);
+                this._oscNodePool[noteNo] = null;
+            }
         }
     }
 
