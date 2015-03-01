@@ -11,7 +11,7 @@ module.exports = (function() {
             return instance;
         }
 
-        _initialize(args) {
+        _initialize() {
             let Ctx = global.AudioContext || global.webkitAudioContext;
             this._oscNodePool = {};
             this.ctx = new Ctx();

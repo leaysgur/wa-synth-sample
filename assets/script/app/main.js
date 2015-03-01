@@ -1,5 +1,4 @@
 // Ctxも切り出す
-// browserify script/app/main.js -o script/app.js
 ;(function(global) {
     'use strict';
 
@@ -16,7 +15,7 @@
         handleEvent: handleEvent
     };
 
-    function initialize(args) {
+    function initialize() {
         this._buildUI()
             ._bindEvents();
 
@@ -71,7 +70,7 @@
             this.osc.stopByNoteNo(noteNo);
             break;
         case 'mouseover':
-            this._isHolding && this.osc.playByNoteNo(noteNo);
+            if (this._isHolding) { this.osc.playByNoteNo(noteNo); }
             break;
         case 'mouseout':
             this.osc.stopByNoteNo(noteNo);

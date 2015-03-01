@@ -1,8 +1,7 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/main.js":[function(require,module,exports){
 "use strict";
 
 // Ctxも切り出す
-// browserify script/app/main.js -o script/app.js
 ;(function (global) {
     "use strict";
 
@@ -19,7 +18,7 @@
         handleEvent: handleEvent
     };
 
-    function initialize(args) {
+    function initialize() {
         this._buildUI()._bindEvents();
 
         this.osc = new Osc();
@@ -73,7 +72,9 @@
                 this.osc.stopByNoteNo(noteNo);
                 break;
             case "mouseover":
-                this._isHolding && this.osc.playByNoteNo(noteNo);
+                if (this._isHolding) {
+                    this.osc.playByNoteNo(noteNo);
+                }
                 break;
             case "mouseout":
                 this.osc.stopByNoteNo(noteNo);
@@ -91,7 +92,7 @@
     }
 })(window);
 
-},{"./../module/osc":2}],2:[function(require,module,exports){
+},{"./../module/osc":"/Users/Yuji/Desktop/wa-synth-sample/assets/script/module/osc.js"}],"/Users/Yuji/Desktop/wa-synth-sample/assets/script/module/osc.js":[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -116,7 +117,7 @@ module.exports = (function () {
 
         _prototypeProperties(Osc, null, {
             _initialize: {
-                value: function _initialize(args) {
+                value: function _initialize() {
                     var Ctx = global.AudioContext || global.webkitAudioContext;
                     this._oscNodePool = {};
                     this.ctx = new Ctx();
@@ -193,4 +194,4 @@ module.exports = (function () {
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1]);
+},{}]},{},["/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/main.js"]);

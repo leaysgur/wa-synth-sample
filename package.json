@@ -4,7 +4,8 @@
   "description": "WebAudio synthesizer sample!",
   "main": "index.html",
   "scripts": {
-    "build": "browserify assets/script/app/main.js -t babelify --outfile static/script/app.js",
+    "dev": "watchify assets/script/app/main.js -t babelify -o static/script/app.js",
+    "build": "browserify assets/script/app/main.js -t babelify -o static/script/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,8 @@
   "homepage": "https://github.com/leader22/wa-synth-sample",
   "devDependencies": {
     "babelify": "^5.0.3"
+  },
+  "dependencies": {
+    "watchify": "^2.4.0"
   }
 }
