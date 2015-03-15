@@ -1,4 +1,13 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/ctx.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/const.js":[function(require,module,exports){
+"use strict";
+
+module.exports = {
+
+    IS_SELECTED: "is-selected"
+
+};
+
+},{}],"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/ctx.js":[function(require,module,exports){
 "use strict";
 
 module.exports = (function (global) {
@@ -135,15 +144,16 @@ module.exports = (function (global) {
     "use strict";
 
     var Osc = require("./../lib/osc");
+    var Const = require("./../lib/const");
 
     var KeyboardApp = (function () {
         function KeyboardApp() {
             _classCallCheck(this, KeyboardApp);
 
-            this._buildUI()._bindEvents();
-
-            this.osc = new Osc();
+            this._osc = new Osc();
             this._isHolding = false;
+
+            this._buildUI()._bindEvents();
 
             return this;
         }
@@ -179,7 +189,7 @@ module.exports = (function (global) {
                     }, false);
 
                     this.ui.muteCtrl[0].addEventListener("change", function (ev) {
-                        _this.osc.setMute(ev.currentTarget.checked);
+                        _this._osc.setMute(ev.currentTarget.checked);
                     }, false);
 
                     return this;
@@ -189,28 +199,31 @@ module.exports = (function (global) {
             },
             handleEvent: {
                 value: function handleEvent(ev) {
-                    var noteNo = ev.currentTarget.getAttribute("data-noteNo") | 0;
+                    var keyEl = ev.currentTarget;
+                    var noteNo = keyEl.getAttribute("data-noteNo") | 0;
 
                     switch (ev.type) {
                         case "mousedown":
                             this._isHolding = true;
-                            this.osc.playByNoteNo(noteNo);
+                            this._osc.playByNoteNo(noteNo);
+                            keyEl.classList.add(Const.IS_SELECTED);
                             break;
                         case "mouseup":
                             this._isHolding = false;
-                            this.osc.stopByNoteNo(noteNo);
+                            this._osc.stopByNoteNo(noteNo);
+                            keyEl.classList.remove(Const.IS_SELECTED);
                             break;
                         case "mouseover":
                             if (this._isHolding) {
-                                this.osc.playByNoteNo(noteNo);
+                                this._osc.playByNoteNo(noteNo);
+                                keyEl.classList.add(Const.IS_SELECTED);
                             }
                             break;
                         case "mouseout":
-                            this.osc.stopByNoteNo(noteNo);
+                            this._osc.stopByNoteNo(noteNo);
+                            keyEl.classList.remove(Const.IS_SELECTED);
                             break;
                     }
-
-                    console.log("ev: %s / hold ? %s", ev.type, this._isHolding);
                 },
                 writable: true,
                 configurable: true
@@ -230,4 +243,4 @@ module.exports = (function (global) {
     }
 })(window);
 
-},{"./../lib/osc":"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/osc.js"}]},{},["/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/main.js"]);
+},{"./../lib/const":"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/const.js","./../lib/osc":"/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/lib/osc.js"}]},{},["/Users/Yuji/Desktop/wa-synth-sample/assets/script/app/main.js"]);

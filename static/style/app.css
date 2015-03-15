@@ -20,6 +20,10 @@
     border: 1px solid #000;
     background-color: #fff;
 }
+.l-keyboard .key.is-selected {
+    transform: translate3d(0, 1px, 0);
+    opacity: .9;
+}
 .l-keyboard .key.m-key-black {
     position: absolute;
     margin-left: -6px;

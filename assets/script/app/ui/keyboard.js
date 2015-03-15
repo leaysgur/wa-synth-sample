@@ -1,15 +1,16 @@
 module.exports = (function(global) {
     'use strict';
 
-    let Osc = require('./../lib/osc');
+    let Osc     = require('./../lib/osc');
+    const Const = require('./../lib/const');
 
     class KeyboardApp {
         constructor() {
+            this._osc        = new Osc();
+            this._isHolding = false;
+
             this._buildUI()
                 ._bindEvents();
-
-            this.osc        = new Osc();
-            this._isHolding = false;
 
             return this;
         }
@@ -38,33 +39,38 @@ module.exports = (function(global) {
             }, false);
 
             this.ui.muteCtrl[0].addEventListener('change', ev => {
-                this.osc.setMute(ev.currentTarget.checked);
+                this._osc.setMute(ev.currentTarget.checked);
             }, false);
 
             return this;
         }
 
         handleEvent(ev) {
-            let noteNo = ev.currentTarget.getAttribute('data-noteNo')|0;
+            let keyEl  = ev.currentTarget;
+            let noteNo = keyEl.getAttribute('data-noteNo')|0;
 
             switch (ev.type) {
             case 'mousedown':
                 this._isHolding = true;
-                this.osc.playByNoteNo(noteNo);
+                this._osc.playByNoteNo(noteNo);
+                keyEl.classList.add(Const.IS_SELECTED);
                 break;
             case 'mouseup':
                 this._isHolding = false;
-                this.osc.stopByNoteNo(noteNo);
+                this._osc.stopByNoteNo(noteNo);
+                keyEl.classList.remove(Const.IS_SELECTED);
                 break;
             case 'mouseover':
-                if (this._isHolding) { this.osc.playByNoteNo(noteNo); }
+                if (this._isHolding) {
+                    this._osc.playByNoteNo(noteNo);
+                    keyEl.classList.add(Const.IS_SELECTED);
+                }
                 break;
             case 'mouseout':
-                this.osc.stopByNoteNo(noteNo);
+                this._osc.stopByNoteNo(noteNo);
+                keyEl.classList.remove(Const.IS_SELECTED);
                 break;
             }
-
-            console.log('ev: %s / hold ? %s', ev.type, this._isHolding);
         }
     }
 
