@@ -2,7 +2,7 @@ module.exports = (function() {
     'use strict';
 
     let instance = null;
-    let Ctx = require('./ctx');
+    let ctx = require('./ctx');
 
     class Osc {
         constructor() {
@@ -14,19 +14,18 @@ module.exports = (function() {
 
         _initialize() {
             this._oscNodePool = {};
-            this.ctx = new Ctx();
-            this.masterGain = this.ctx.createGain();
-            this.masterGain.connect(this.ctx.destination);
+            this.masterGain = ctx.createGain();
+            this.masterGain.connect(ctx.destination);
             return this;
         }
 
         playByNoteNo(noteNo) {
             let freq = _noteNoToFreq(noteNo);
-            let osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
+            let osc = this._oscNodePool[noteNo] = ctx.createOscillator();
 
             osc.frequency.value = freq;
             osc.connect(this.masterGain);
-            osc.start(this.ctx.currentTime);
+            osc.start(ctx.currentTime);
         }
 
         stopByNoteNo(noteNo) {

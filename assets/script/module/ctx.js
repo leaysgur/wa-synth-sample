@@ -12,5 +12,5 @@ module.exports = (function(global) {
         throw new Error('WebAudio is not supported...');
     }
 
-    return AudioContext;
+    return (new AudioContext());
 }(window));

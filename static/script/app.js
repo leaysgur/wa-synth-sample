@@ -117,7 +117,7 @@ module.exports = (function (global) {
         throw new Error("WebAudio is not supported...");
     }
 
-    return AudioContext;
+    return new AudioContext();
 })(window);
 
 },{}],"/Users/Yuji/Desktop/wa-synth-sample/assets/script/module/osc.js":[function(require,module,exports){
@@ -131,7 +131,7 @@ module.exports = (function () {
     "use strict";
 
     var instance = null;
-    var Ctx = require("./ctx");
+    var ctx = require("./ctx");
 
     var Osc = (function () {
         function Osc() {
@@ -147,9 +147,8 @@ module.exports = (function () {
             _initialize: {
                 value: function _initialize() {
                     this._oscNodePool = {};
-                    this.ctx = new Ctx();
-                    this.masterGain = this.ctx.createGain();
-                    this.masterGain.connect(this.ctx.destination);
+                    this.masterGain = ctx.createGain();
+                    this.masterGain.connect(ctx.destination);
                     return this;
                 },
                 writable: true,
@@ -158,11 +157,11 @@ module.exports = (function () {
             playByNoteNo: {
                 value: function playByNoteNo(noteNo) {
                     var freq = _noteNoToFreq(noteNo);
-                    var osc = this._oscNodePool[noteNo] = this.ctx.createOscillator();
+                    var osc = this._oscNodePool[noteNo] = ctx.createOscillator();
 
                     osc.frequency.value = freq;
                     osc.connect(this.masterGain);
-                    osc.start(this.ctx.currentTime);
+                    osc.start(ctx.currentTime);
                 },
                 writable: true,
                 configurable: true
